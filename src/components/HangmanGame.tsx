@@ -29,6 +29,8 @@ const GameControls = styled.div`
   flex-direction: column;
   gap: 2rem;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   padding-left: 2rem;
 
   @media (max-width: 1200px) {
@@ -39,30 +41,31 @@ const GameControls = styled.div`
 
 const Word = styled.div`
   display: flex;
-  gap: 0.8rem;
-  margin: 2rem 0;
+  gap: clamp(0.3rem, 1vw, 0.8rem);
+  margin: 2rem auto;
   justify-content: center;
-  flex-wrap: wrap;
+  width: 100%;
+  padding: 1rem 0;
+  flex-wrap: nowrap;
 
   @media (max-width: 480px) {
-    gap: 0.4rem;
-    margin: 1rem 0;
+    margin: 1rem auto;
+    padding: 0.5rem 0;
   }
 `;
 
 const Letter = styled(motion.span)<{ isRevealed?: boolean }>`
-  font-size: 3rem;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
   font-weight: bold;
   border-bottom: 4px solid ${props => props.isRevealed ? '#CB0404' : '#FF9F00'};
-  width: 50px;
+  min-width: clamp(25px, 4vw, 40px);
   text-align: center;
   text-transform: uppercase;
   color: ${props => props.isRevealed ? '#CB0404' : '#fff'};
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 
   @media (max-width: 480px) {
-    font-size: 2rem;
-    width: 35px;
     border-bottom-width: 3px;
   }
 `;
