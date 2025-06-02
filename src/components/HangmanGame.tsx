@@ -199,20 +199,23 @@ const HangmanGame = ({ difficulty, onReset }: HangmanGameProps) => {
         .split('\n')
         .map(w => w.trim().toLowerCase())
         .filter(w =>
-          w.length >= 3 &&
+          w.length >= 4 &&
           w.length <= 20 &&
           /^[a-z]+$/.test(w) &&
-          !commonWords.has(w)
+          !commonWords.has(w) &&
+          // Filter out likely abbreviations (words with no vowels or too many consonants in a row)
+          /[aeiou]/i.test(w) &&
+          !/[bcdfghjklmnpqrstvwxz]{4,}/i.test(w)
         );
 
       let filteredWords: string[] = [];
 
       switch (difficulty) {
         case 'novice':
-          filteredWords = allWords.filter(w => w.length >= 3 && w.length <= 4);
+          filteredWords = allWords.filter(w => w.length >= 4 && w.length <= 5);
           break;
         case 'intermediate':
-          filteredWords = allWords.filter(w => w.length >= 5 && w.length <= 7);
+          filteredWords = allWords.filter(w => w.length >= 6 && w.length <= 7);
           break;
         case 'hard':
           filteredWords = allWords.filter(w => w.length >= 8);

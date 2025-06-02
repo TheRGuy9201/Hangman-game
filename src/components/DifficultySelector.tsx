@@ -67,8 +67,8 @@ interface DifficultySelectorProps {
 
 const DifficultySelector = ({ onSelect }: DifficultySelectorProps) => {
   const difficulties = [
-    { level: 'novice', description: '3-4 letter words' },
-    { level: 'intermediate', description: '5-7 letter words' },
+    { level: 'novice', description: '4-5 letter words' },
+    { level: 'intermediate', description: '6-7 letter words' },
     { level: 'hard', description: '8+ letter words' },
   ];
 
