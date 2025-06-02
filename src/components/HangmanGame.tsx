@@ -165,17 +165,17 @@ interface HangmanGameProps {
   onReset: () => void;
 }
 
-const getWordForDifficulty = (difficulty: string): string => {
-  // This is a small sample. In a real app, you'd want a much larger word list
-  const words = {
-    novice: ['cat', 'dog', 'run', 'jump', 'play'],
-    intermediate: ['python', 'coding', 'gaming', 'puzzle'],
-    hard: ['challenge', 'developer', 'javascript', 'programming']
-  };
+// const getWordForDifficulty = (difficulty: string): string => {
+//   // This is a small sample. In a real app, you'd want a much larger word list
+//   const words = {
+//     novice: ['cat', 'dog', 'run', 'jump', 'play'],
+//     intermediate: ['python', 'coding', 'gaming', 'puzzle'],
+//     hard: ['challenge', 'developer', 'javascript', 'programming']
+//   };
   
-  const wordList = words[difficulty as keyof typeof words];
-  return wordList[Math.floor(Math.random() * wordList.length)];
-};
+//   const wordList = words[difficulty as keyof typeof words];
+//   return wordList[Math.floor(Math.random() * wordList.length)];
+// };
 
 const HangmanGame = ({ difficulty, onReset }: HangmanGameProps) => {
   const [word, setWord] = useState('');
@@ -184,8 +184,52 @@ const HangmanGame = ({ difficulty, onReset }: HangmanGameProps) => {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
 
   useEffect(() => {
-    setWord(getWordForDifficulty(difficulty));
-  }, [difficulty]);
+  fetch('/20k.txt')
+    .then(res => res.text())
+    .then(text => {
+      const commonWords = new Set([
+        "the", "a", "an", "in", "on", "at", "to", "from", "by", "for",
+        "of", "and", "or", "but", "if", "than", "so", "yet", "with",
+        "about", "as", "into", "like", "through", "after", "over",
+        "under", "between", "out", "against", "during", "without",
+        "before", "around", "near", "since", "until", "upon"
+      ]);
+
+      const allWords = text
+        .split('\n')
+        .map(w => w.trim().toLowerCase())
+        .filter(w =>
+          w.length >= 3 &&
+          w.length <= 20 &&
+          /^[a-z]+$/.test(w) &&
+          !commonWords.has(w)
+        );
+
+      let filteredWords: string[] = [];
+
+      switch (difficulty) {
+        case 'novice':
+          filteredWords = allWords.filter(w => w.length >= 3 && w.length <= 4);
+          break;
+        case 'intermediate':
+          filteredWords = allWords.filter(w => w.length >= 5 && w.length <= 7);
+          break;
+        case 'hard':
+          filteredWords = allWords.filter(w => w.length >= 8);
+          break;
+        default:
+          filteredWords = allWords;
+      }
+
+      const randomWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
+      setWord(randomWord || 'fallback'); // fallback if list empty
+    })
+    .catch(err => {
+      console.error('Failed to load word list:', err);
+      setWord('fallback'); // fallback if fetch fails
+    });
+}, [difficulty]);
+
 
   const handleGuess = (letter: string) => {
     if (gameStatus !== 'playing') return;
