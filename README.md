@@ -34,32 +34,6 @@ npm install
 npm run dev
 ```
 
-## Deployment
-
-### Deploying to Vercel
-
-1. Create a Vercel account at https://vercel.com
-2. Install the Vercel CLI:
-```bash
-npm install -g vercel
-```
-
-3. Login to Vercel:
-```bash
-vercel login
-```
-
-4. Deploy the project:
-```bash
-vercel
-```
-
-### Alternative Deployment Options
-
-- **GitHub Pages**: Run `npm run build` and deploy the `dist` folder
-- **Netlify**: Connect your GitHub repository or deploy manually
-- **Firebase**: Use Firebase Hosting for deployment
-
 ## Built With
 
 - React
